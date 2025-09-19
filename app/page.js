@@ -54,7 +54,7 @@ export default function Home() {
             <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
               <Leaf className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold">Metal LCA</span>
+            <span className="text-xl font-bold">Dhatu Chakra</span>
           </motion.div>
 
           <motion.div
@@ -118,7 +118,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-xl sm:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              Metal LCA is the advanced tool for environmental analysis. Assess
+              Dhatu Chakra is the advanced tool for environmental analysis. Assess
               impact, optimize circularity, and scale with comprehensive
               insights and analytics.
             </p>
@@ -231,7 +231,7 @@ export default function Home() {
             environmental impact?
           </h2>
           <p className="text-xl text-gray-400 mb-10">
-            Join leading manufacturers using Metal LCA for sustainable
+            Join leading manufacturers using Dhatu Chakra for sustainable
             innovation.
           </p>
 
@@ -265,10 +265,10 @@ export default function Home() {
               <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
                 <Leaf className="w-4 h-4 text-white" />
               </div>
-              <span className="font-semibold">Metal LCA</span>
+              <span className="font-semibold">Dhatu Chakra</span>
             </div>
             <div className="text-gray-400 text-sm">
-              © 2024 Metal LCA. Building sustainable futures.
+              © 2024 Dhatu Chakra. Building sustainable futures.
             </div>
           </div>
         </div>
