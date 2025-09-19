@@ -18,7 +18,6 @@ import {
   Factory,
 } from "lucide-react";
 import useLcaStore from "@/app/store/lcaStore";
-import AISuggestions from "./AISuggestions";
 
 export function LcaWizard() {
   const router = useRouter();
@@ -230,15 +229,6 @@ export function LcaWizard() {
                 </select>
               </div>
             </div>
-
-            {/* AI Suggestions */}
-            <AISuggestions
-              projectData={currentProject}
-              onApplySuggestion={(suggestion) => {
-                // Could implement auto-application of suggestions here
-                console.log("AI Suggestion:", suggestion);
-              }}
-            />
           </motion.div>
         );
 

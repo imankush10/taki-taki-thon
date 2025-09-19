@@ -4,6 +4,7 @@ import { useEffect, useState, use } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader } from "@/app/components/ui/Card";
 import { Button } from "@/app/components/ui/Button";
+import { ExportModal } from "@/app/components/ui/ExportModal";
 import { ImpactChart } from "@/app/components/lca/ImpactChart";
 import { CircularityFlow } from "@/app/components/lca/CircularityFlow";
 import { MetricCard } from "@/app/components/lca/MetricCard";
@@ -29,7 +30,143 @@ export default function LcaResultsPage({ params }) {
   // Unwrap the async params using React.use()
   const resolvedParams = use(params);
   const [results, setResults] = useState(null);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const { currentResults } = useLcaStore();
+
+  // Export functionality
+  const handleExport = (format) => {
+    // Create a detailed export object
+    const dataToExport = {
+      projectInfo: {
+        name: results.projectData?.projectName || "LCA Analysis",
+        id: results.projectId,
+        date: new Date(results.timestamp).toLocaleDateString(),
+        metal: results.projectData?.metal,
+        rawMaterialPercentage: results.projectData?.rawMaterialPercentage,
+        energySource: results.projectData?.energySource,
+        transportDistance: results.projectData?.transportDistance,
+        endOfLifeOption: results.projectData?.endOfLifeOption,
+      },
+      environmentalImpacts: results.environmentalImpacts,
+      circularityScore: results.circularFlowData?.circularityScore,
+      recommendations: results.recommendations,
+      summary: {
+        totalImpactScore: "Good",
+        analysisDate: new Date(results.timestamp).toLocaleString(),
+      }
+    };
+
+    // Export based on format
+    if (format === "json") {
+      exportAsJSON(dataToExport);
+    } else if (format === "csv") {
+      exportAsCSV(dataToExport);
+    } else if (format === "text") {
+      exportAsTextReport(dataToExport);
+    }
+  };
+
+  const openExportModal = () => {
+    setIsExportModalOpen(true);
+  };
+
+  const exportAsJSON = (data) => {
+    const jsonString = JSON.stringify(data, null, 2);
+    downloadFile(jsonString, 'application/json', 'json');
+  };
+
+  const exportAsCSV = (data) => {
+    let csvContent = "Category,Metric,Value,Unit,Rating\n";
+    
+    // Add environmental impacts
+    Object.entries(data.environmentalImpacts).forEach(([key, value]) => {
+      csvContent += `Environmental Impact,${key.replace(/([A-Z])/g, ' $1').trim()},${value.value},${value.unit},${value.rating}\n`;
+    });
+    
+    // Add project info
+    Object.entries(data.projectInfo).forEach(([key, value]) => {
+      csvContent += `Project Info,${key.replace(/([A-Z])/g, ' $1').trim()},${value},,\n`;
+    });
+    
+    // Add circularity score
+    csvContent += `Circularity,Score,${data.circularityScore},%,\n`;
+    
+    downloadFile(csvContent, 'text/csv', 'csv');
+  };
+
+  const exportAsTextReport = (data) => {
+    const report = `
+LCA ANALYSIS REPORT
+==================
+
+Project Information:
+- Name: ${data.projectInfo.name}
+- ID: ${data.projectInfo.id}
+- Analysis Date: ${data.projectInfo.date}
+- Metal Type: ${data.projectInfo.metal}
+- Raw Material Percentage: ${data.projectInfo.rawMaterialPercentage}%
+- Energy Source: ${data.projectInfo.energySource}
+- Transport Distance: ${data.projectInfo.transportDistance} km
+- End-of-Life Option: ${data.projectInfo.endOfLifeOption}
+
+Environmental Impact Results:
+${Object.entries(data.environmentalImpacts).map(([key, value]) => 
+  `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value.value} ${value.unit} (${value.rating} impact)`
+).join('\n')}
+
+Circularity Score: ${data.circularityScore}%
+
+Recommendations:
+${data.recommendations.map((rec, index) => `${index + 1}. ${rec}`).join('\n')}
+
+Generated on: ${data.summary.analysisDate}
+`;
+    
+    downloadFile(report, 'text/plain', 'txt');
+  };
+
+  const downloadFile = (content, mimeType, extension) => {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `LCA_Analysis_${results.projectData?.projectName?.replace(/\s+/g, '_') || 'Report'}_${new Date().toISOString().split('T')[0]}.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // Share functionality
+  const handleShare = async () => {
+    const shareData = {
+      title: `LCA Analysis - ${results.projectData?.projectName || 'Metal Analysis'}`,
+      text: `Check out this Life Cycle Assessment for ${results.projectData?.metal} with a circularity score of ${results.circularFlowData?.circularityScore}%`,
+      url: window.location.href,
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        console.log('Error sharing:', error);
+        fallbackShare();
+      }
+    } else {
+      fallbackShare();
+    }
+  };
+
+  const fallbackShare = () => {
+    // Copy URL to clipboard as fallback
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert('Link copied to clipboard! You can now share it.');
+    }).catch(() => {
+      // Final fallback - show the URL
+      const urlToCopy = window.location.href;
+      prompt('Copy this link to share:', urlToCopy);
+    });
+  };
 
   useEffect(() => {
     // Try to get results from Zustand store first
@@ -100,11 +237,18 @@ export default function LcaResultsPage({ params }) {
             </div>
 
             <div className="flex items-center gap-2">
-              <Button variant="secondary" className="flex items-center gap-2">
+              <Button 
+                variant="secondary" 
+                className="flex items-center gap-2"
+                onClick={handleShare}
+              >
                 <Share2 className="w-4 h-4" />
                 Share
               </Button>
-              <Button className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-blue-600">
+              <Button 
+                className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-blue-600"
+                onClick={openExportModal}
+              >
                 <Download className="w-4 h-4" />
                 Export
               </Button>
@@ -361,6 +505,14 @@ export default function LcaResultsPage({ params }) {
           </Card>
         </motion.div>
       </main>
+
+      {/* Export Modal */}
+      <ExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        onExport={handleExport}
+        projectName={results.projectData?.projectName || "LCA Analysis"}
+      />
     </div>
   );
 }
