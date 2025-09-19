@@ -7,6 +7,7 @@ import { Button } from "@/app/components/ui/Button";
 import { ImpactChart } from "@/app/components/lca/ImpactChart";
 import { CircularityFlow } from "@/app/components/lca/CircularityFlow";
 import { MetricCard } from "@/app/components/lca/MetricCard";
+import AIInsights from "@/app/components/lca/AIInsights";
 import {
   ArrowLeft,
   Download,
@@ -55,9 +56,7 @@ export default function LcaResultsPage({ params }) {
           className="text-center"
         >
           <RefreshCw className="w-12 h-12 mx-auto mb-4 text-blue-500 animate-spin" />
-          <p className="text-xl text-gray-300">
-            Loading results...
-          </p>
+          <p className="text-xl text-gray-300">Loading results...</p>
           <p className="text-sm text-gray-500 mt-2">
             If results don't appear, they may not be found
           </p>
@@ -248,6 +247,19 @@ export default function LcaResultsPage({ params }) {
               </div>
             </CardContent>
           </Card>
+        </motion.div>
+
+        {/* AI-Powered Insights */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
+          <AIInsights
+            projectData={results.projectData}
+            environmentalImpacts={results.environmentalImpacts}
+            circularFlowData={results.circularFlowData}
+          />
         </motion.div>
 
         {/* Raw Data (Collapsible) */}

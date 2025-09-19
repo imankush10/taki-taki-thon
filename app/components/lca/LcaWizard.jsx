@@ -18,6 +18,7 @@ import {
   Factory,
 } from "lucide-react";
 import useLcaStore from "@/app/store/lcaStore";
+import AISuggestions from "./AISuggestions";
 
 export function LcaWizard() {
   const router = useRouter();
@@ -46,6 +47,12 @@ export function LcaWizard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Only proceed if we're on the last step
+    if (currentStep !== 3) {
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -59,6 +66,13 @@ export function LcaWizard() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFormKeyDown = (e) => {
+    // Prevent form submission on Enter key press unless it's the Generate button
+    if (e.key === "Enter" && e.target.type !== "submit") {
+      e.preventDefault();
     }
   };
 
@@ -118,6 +132,11 @@ export function LcaWizard() {
                   placeholder="e.g., High-Grade Copper Wire Manufacturing"
                   className="h-12 text-lg"
                   required
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
                 />
               </div>
 
@@ -211,6 +230,15 @@ export function LcaWizard() {
                 </select>
               </div>
             </div>
+
+            {/* AI Suggestions */}
+            <AISuggestions
+              projectData={currentProject}
+              onApplySuggestion={(suggestion) => {
+                // Could implement auto-application of suggestions here
+                console.log("AI Suggestion:", suggestion);
+              }}
+            />
           </motion.div>
         );
 
@@ -249,6 +277,11 @@ export function LcaWizard() {
                   onChange={handleChange}
                   placeholder="e.g., 500"
                   className="h-12 text-lg"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
                 />
                 <p className="text-sm text-gray-500 mt-1">
                   Average distance from manufacturing to end-user
@@ -339,7 +372,7 @@ export function LcaWizard() {
       {/* Main Content */}
       <Card className="overflow-hidden shadow-xl border-0 bg-white dark:bg-gray-800">
         <CardContent className="p-8">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
             <AnimatePresence mode="wait">{getStepContent()}</AnimatePresence>
 
             <div className="mt-8 flex justify-between items-center">
@@ -365,7 +398,8 @@ export function LcaWizard() {
                 </Button>
               ) : (
                 <Button
-                  type="submit"
+                  type="button"
+                  onClick={handleSubmit}
                   disabled={isLoading}
                   className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-lg"
                 >

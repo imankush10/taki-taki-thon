@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Metal LCA - Sustainable Manufacturing Analytics",
+  title: "Dhatu Chakra - Sustainable Manufacturing Analytics",
   description:
     "Comprehensive Life Cycle Assessment platform for metal products. Analyze environmental impact, optimize circular economy strategies, and make data-driven sustainability decisions.",
 };

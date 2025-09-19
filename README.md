@@ -1,24 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Metal LCA Analysis Tool
 
-## Getting Started
+A modern web application for conducting Life Cycle Assessment (LCA) analysis on metal products, enhanced with AI-powered insights.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Interactive LCA Wizard**: Step-by-step guidance for LCA data collection
+- **Real-time Visualizations**: Charts and graphs powered by Chart.js
+- **AI-Powered Insights**: Google Gemini integration for intelligent analysis
+- **Modern UI**: Built with Next.js 15, React 19, and TailwindCSS
+- **State Management**: Zustand for centralized data management
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. Clone the repository
+2. Install dependencies: `pnpm install`
+3. Set up environment variables:
+   - Copy `.env.local.example` to `.env.local`
+   - Add your Google Gemini API key: `GOOGLE_GEMINI_API_KEY=your_key_here`
+4. Run the development server: `pnpm dev`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## AI Integration
+
+This application uses Google Gemini AI (gemini-1.5-flash model) to provide:
+
+- Intelligent environmental impact analysis
+- Personalized sustainability recommendations
+- Quick optimization tips during the LCA process
+
+To get a Gemini API key:
+
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Create a new API key
+3. Add it to your `.env.local` file
 
 ## Learn More
 
