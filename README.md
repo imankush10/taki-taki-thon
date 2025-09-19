@@ -19,7 +19,53 @@ A modern web application for conducting Life Cycle Assessment (LCA) analysis on 
    - Add your Google Gemini API key: `GOOGLE_GEMINI_API_KEY=your_key_here`
 4. Run the development server: `pnpm dev`
 
-## AI Integration
+## 🎬 Scroll Canvas Animation
+
+The landing page features a smooth scroll-based canvas animation that plays through frame-by-frame images as the user scrolls. The animation serves as a fixed background with a subtle black overlay for optimal readability.
+
+### Current Setup (Optimized)
+
+- **Frame Count**: 140 optimized frames
+- **Format**: JPG (compressed for faster loading)
+- **Naming**: `frame0001.jpg`, `frame0002.jpg`, etc.
+- **Location**: `/public/frames/`
+
+### Adding Your Own Images
+
+1. **Prepare your images:**
+
+   - Name them sequentially: `frame0001.jpg`, `frame0002.jpg`, etc.
+   - Recommended resolution: 1920x1080 or similar 16:9 aspect ratio
+   - Compress for web to optimize loading speed
+
+2. **Update configuration in `app/page.js`:**
+   ```javascript
+   <ScrollCanvas
+     imageCount={140} // Your total number of frames
+     imagePath="/frames/frame" // Path prefix (no underscore)
+     imageExtension=".jpg" // Your image format
+     useGeneratedFrames={false} // Use actual images
+     className="w-full h-full"
+   />
+   ```
+
+## 🎨 Scroll Animation Features
+
+- **Smooth Performance**: Images are preloaded for seamless scrolling
+- **Responsive Design**: Automatically scales to fit different screen sizes
+- **Loading Progress**: Shows loading indicator while frames are being prepared
+- **Fallback System**: Generates placeholder frames if images fail to load
+- **Optimized Rendering**: Only renders frames as needed during scroll
+
+## 🔧 Customization Options
+
+- `imageCount`: Number of frames in your animation
+- `imagePath`: Base path to your image files
+- `imageExtension`: File extension (`.jpg`, `.png`, etc.)
+- `useGeneratedFrames`: Whether to use generated demo frames
+- `className`: Additional CSS classes for styling
+
+## Google Gemini AI Integration
 
 This application uses Google Gemini AI (gemini-1.5-flash model) to provide:
 

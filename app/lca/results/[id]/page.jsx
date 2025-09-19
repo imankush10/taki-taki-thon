@@ -53,7 +53,7 @@ export default function LcaResultsPage({ params }) {
       summary: {
         totalImpactScore: "Good",
         analysisDate: new Date(results.timestamp).toLocaleString(),
-      }
+      },
     };
 
     // Export based on format
@@ -72,26 +72,30 @@ export default function LcaResultsPage({ params }) {
 
   const exportAsJSON = (data) => {
     const jsonString = JSON.stringify(data, null, 2);
-    downloadFile(jsonString, 'application/json', 'json');
+    downloadFile(jsonString, "application/json", "json");
   };
 
   const exportAsCSV = (data) => {
     let csvContent = "Category,Metric,Value,Unit,Rating\n";
-    
+
     // Add environmental impacts
     Object.entries(data.environmentalImpacts).forEach(([key, value]) => {
-      csvContent += `Environmental Impact,${key.replace(/([A-Z])/g, ' $1').trim()},${value.value},${value.unit},${value.rating}\n`;
+      csvContent += `Environmental Impact,${key
+        .replace(/([A-Z])/g, " $1")
+        .trim()},${value.value},${value.unit},${value.rating}\n`;
     });
-    
+
     // Add project info
     Object.entries(data.projectInfo).forEach(([key, value]) => {
-      csvContent += `Project Info,${key.replace(/([A-Z])/g, ' $1').trim()},${value},,\n`;
+      csvContent += `Project Info,${key
+        .replace(/([A-Z])/g, " $1")
+        .trim()},${value},,\n`;
     });
-    
+
     // Add circularity score
     csvContent += `Circularity,Score,${data.circularityScore},%,\n`;
-    
-    downloadFile(csvContent, 'text/csv', 'csv');
+
+    downloadFile(csvContent, "text/csv", "csv");
   };
 
   const exportAsTextReport = (data) => {
@@ -110,27 +114,34 @@ Project Information:
 - End-of-Life Option: ${data.projectInfo.endOfLifeOption}
 
 Environmental Impact Results:
-${Object.entries(data.environmentalImpacts).map(([key, value]) => 
-  `- ${key.replace(/([A-Z])/g, ' $1').trim()}: ${value.value} ${value.unit} (${value.rating} impact)`
-).join('\n')}
+${Object.entries(data.environmentalImpacts)
+  .map(
+    ([key, value]) =>
+      `- ${key.replace(/([A-Z])/g, " $1").trim()}: ${value.value} ${
+        value.unit
+      } (${value.rating} impact)`
+  )
+  .join("\n")}
 
 Circularity Score: ${data.circularityScore}%
 
 Recommendations:
-${data.recommendations.map((rec, index) => `${index + 1}. ${rec}`).join('\n')}
+${data.recommendations.map((rec, index) => `${index + 1}. ${rec}`).join("\n")}
 
 Generated on: ${data.summary.analysisDate}
 `;
-    
-    downloadFile(report, 'text/plain', 'txt');
+
+    downloadFile(report, "text/plain", "txt");
   };
 
   const downloadFile = (content, mimeType, extension) => {
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = `LCA_Analysis_${results.projectData?.projectName?.replace(/\s+/g, '_') || 'Report'}_${new Date().toISOString().split('T')[0]}.${extension}`;
+    link.download = `LCA_Analysis_${
+      results.projectData?.projectName?.replace(/\s+/g, "_") || "Report"
+    }_${new Date().toISOString().split("T")[0]}.${extension}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -140,16 +151,22 @@ Generated on: ${data.summary.analysisDate}
   // Share functionality
   const handleShare = async () => {
     const shareData = {
-      title: `LCA Analysis - ${results.projectData?.projectName || 'Metal Analysis'}`,
+      title: `LCA Analysis - ${
+        results.projectData?.projectName || "Metal Analysis"
+      }`,
       text: `Check out this Life Cycle Assessment for ${results.projectData?.metal} with a circularity score of ${results.circularFlowData?.circularityScore}%`,
       url: window.location.href,
     };
 
-    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+    if (
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare(shareData)
+    ) {
       try {
         await navigator.share(shareData);
       } catch (error) {
-        console.log('Error sharing:', error);
+        console.log("Error sharing:", error);
         fallbackShare();
       }
     } else {
@@ -159,13 +176,16 @@ Generated on: ${data.summary.analysisDate}
 
   const fallbackShare = () => {
     // Copy URL to clipboard as fallback
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      alert('Link copied to clipboard! You can now share it.');
-    }).catch(() => {
-      // Final fallback - show the URL
-      const urlToCopy = window.location.href;
-      prompt('Copy this link to share:', urlToCopy);
-    });
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => {
+        alert("Link copied to clipboard! You can now share it.");
+      })
+      .catch(() => {
+        // Final fallback - show the URL
+        const urlToCopy = window.location.href;
+        prompt("Copy this link to share:", urlToCopy);
+      });
   };
 
   useEffect(() => {
@@ -237,15 +257,15 @@ Generated on: ${data.summary.analysisDate}
             </div>
 
             <div className="flex items-center gap-2">
-              <Button 
-                variant="secondary" 
+              <Button
+                variant="secondary"
                 className="flex items-center gap-2"
                 onClick={handleShare}
               >
                 <Share2 className="w-4 h-4" />
                 Share
               </Button>
-              <Button 
+              <Button
                 className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-blue-600"
                 onClick={openExportModal}
               >

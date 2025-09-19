@@ -16,7 +16,7 @@ export function ExportModal({ isOpen, onClose, onExport, projectName }) {
     },
     {
       type: "csv",
-      title: "CSV Format", 
+      title: "CSV Format",
       description: "Spreadsheet-friendly format for Excel and Google Sheets",
       icon: <FileSpreadsheet className="w-8 h-8" />,
       color: "from-green-500 to-emerald-500",
@@ -27,7 +27,7 @@ export function ExportModal({ isOpen, onClose, onExport, projectName }) {
       title: "Text Report",
       description: "Human-readable summary report for printing and sharing",
       icon: <FileText className="w-8 h-8" />,
-      color: "from-purple-500 to-pink-500", 
+      color: "from-purple-500 to-pink-500",
       buttonColor: "bg-purple-600 hover:bg-purple-700",
     },
   ];
@@ -88,10 +88,10 @@ export function ExportModal({ isOpen, onClose, onExport, projectName }) {
                 <div className="bg-gray-800 rounded-xl p-4 border border-gray-700 hover:border-gray-600 transition-all duration-300 hover:shadow-lg">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4 flex-1">
-                      <div className={`p-3 rounded-lg bg-gradient-to-r ${option.color} bg-opacity-20`}>
-                        <div className="text-white">
-                          {option.icon}
-                        </div>
+                      <div
+                        className={`p-3 rounded-lg bg-gradient-to-r ${option.color} bg-opacity-20`}
+                      >
+                        <div className="text-white">{option.icon}</div>
                       </div>
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-white mb-1">
@@ -121,11 +121,7 @@ export function ExportModal({ isOpen, onClose, onExport, projectName }) {
               <p className="text-sm text-gray-400">
                 Files will be downloaded automatically to your device
               </p>
-              <Button
-                variant="secondary"
-                onClick={onClose}
-                className="px-6"
-              >
+              <Button variant="secondary" onClick={onClose} className="px-6">
                 Cancel
               </Button>
             </div>

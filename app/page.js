@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import Lenis from "lenis";
+import { ScrollCanvas } from "./components/ui/ScrollCanvas";
 import {
   Leaf,
   Recycle,
@@ -14,8 +17,28 @@ import {
   TrendingUp,
   CheckCircle,
 } from "lucide-react";
+import RainbowButton from "./components/ui/RainbowButton";
 
 export default function Home() {
+  // Initialize Lenis smooth scrolling
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
   const features = [
     {
       icon: <Leaf className="w-6 h-6" />,
@@ -42,237 +65,281 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Navigation */}
-      <nav className="relative z-10 px-6 py-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2"
-          >
-            <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
-              <Leaf className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold">Dhatu Chakra</span>
-          </motion.div>
+    <div className="min-h-screen bg-black text-white overflow-hidden relative">
+      {/* Fixed Background Canvas Animation */}
+      <div className="fixed inset-0 z-0">
+        <ScrollCanvas
+          imageCount={230}
+          imagePath="/frames/frame_"
+          imageExtension=".jpg"
+          useGeneratedFrames={false}
+          className="w-full h-full"
+        />
+        {/* Black overlay for readability - stronger */}
+        <div className="absolute inset-0 bg-black/77 z-10"></div>
+      </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="hidden md:flex items-center gap-8"
-          >
-            <a
-              href="#features"
-              className="text-gray-400 hover:text-white transition-colors"
+      {/* All content with higher z-index */}
+      <div className="relative z-20">
+        {/* Navigation */}
+        <nav className="relative z-10 px-6 py-6">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-2"
             >
-              Features
-            </a>
-            <a
-              href="#about"
-              className="text-gray-400 hover:text-white transition-colors"
+              <span className="text-xl font-bold">Dhatu Chakra</span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="hidden md:flex items-center gap-8"
             >
-              About
-            </a>
-            <Link href="/lca/new">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white text-black px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors"
+              <a
+                href="#features"
+                className="text-gray-400 hover:text-white transition-colors"
               >
-                Start Analysis
-              </motion.button>
-            </Link>
-          </motion.div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="relative px-6 py-4 sm:py-2">
-        <div className="max-w-7xl mx-auto">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex justify-center mb-8"
-          >
-            <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-full text-blue-400 text-sm">
-              <Sparkles className="w-4 h-4" />
-              New: Advanced Environmental Analytics
-            </div>
-          </motion.div>
-
-          {/* Main Heading */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-center mb-12"
-          >
-            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold leading-tight tracking-tight mb-6">
-              Build better
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-blue-400 to-purple-400">
-                sustainability
-              </span>
-            </h1>
-            <p className="text-xl sm:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              Dhatu Chakra is the advanced tool for environmental analysis. Assess
-              impact, optimize circularity, and scale with comprehensive
-              insights and analytics.
-            </p>
-          </motion.div>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20"
-          >
-            <Link href="/lca/new">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white text-black px-8 py-4 rounded-full font-semibold text-lg flex items-center gap-2 hover:bg-gray-100 transition-colors"
+                Features
+              </a>
+              <a
+                href="#about"
+                className="text-gray-400 hover:text-white transition-colors"
               >
+                About
+              </a>
+              <RainbowButton href="/lca/new" className="bg-white/90">
                 Start for free
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
-            </Link>
-          </motion.div>
+              </RainbowButton>
+            </motion.div>
+          </div>
+        </nav>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
-          >
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
-                  {stat.number}
+        {/* Hero Section */}
+        <section className="relative px-6 py-4 sm:py-2">
+          <div className="max-w-7xl mx-auto mt-16 sm:mt-24 lg:mt-32">
+            {/* Main Heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="text-center mb-12"
+            >
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-normal leading-20 tracking-tight mb-6 text-white drop-shadow-lg">
+                Dhatu Chakra
+              </h1>
+              <p className="text-xl sm:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
+                Advanced Life Cycle Assessment for metal industries. Analyze
+                environmental impact, optimize sustainability, and scale with
+                comprehensive insights.
+              </p>
+            </motion.div>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20"
+            >
+              <RainbowButton href="/lca/new" className="bg-white/90">
+                Start for free
+              </RainbowButton>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+            >
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
+                    {stat.number}
+                  </div>
+                  <div className="text-gray-400 text-sm">{stat.label}</div>
                 </div>
-                <div className="text-gray-400 text-sm">{stat.label}</div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="px-6 py-20">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-white drop-shadow-lg">
+                Everything you need for
+                <br />
+                <span className="text-4xl sm:text-5xl font-light text-gray-300">
+                  environmental analysis
+                </span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto drop-shadow-md">
+                Comprehensive tools for Life Cycle Assessment with real-time
+                insights and actionable recommendations.
+              </p>
+            </motion.div>
+
+            <div className="relative max-w-6xl mx-auto">
+              {/* Crazy Minimalist Feature Layout */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 relative">
+                {features.map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: index * 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.8,
+                      delay: index * 0.2,
+                      type: "spring",
+                      bounce: 0.3,
+                    }}
+                    viewport={{ once: true }}
+                    className="relative group"
+                  >
+
+                    {/* Diagonal Card */}
+                    <motion.div
+                      whileHover={{
+                        y: -10,
+                        transition: { duration: 0.3 },
+                      }}
+                      className={`
+                        relative mt-8 p-8 pb-12 min-h-[280px]
+                        bg-white/5 backdrop-blur-sm
+                        border border-white/10
+                        transform transition-all duration-500
+                        group-hover:bg-white/10 group-hover:border-white/20
+                        ${
+                          index === 0
+                            ? "skew-y-1"
+                            : index === 1
+                            ? "-skew-y-1"
+                            : "skew-y-1"
+                        }
+                      `}
+                    >
+                      {/* Number */}
+                      <div
+                        className={`
+                        absolute top-4 right-4 w-8 h-8 rounded-full
+                        text-xs font-bold flex items-center justify-center
+                        ${
+                          index === 0
+                            ? "bg-emerald-500/30 text-emerald-300"
+                            : index === 1
+                            ? "bg-blue-500/30 text-blue-300"
+                            : "bg-purple-500/30 text-purple-300"
+                        }
+                      `}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </div>
+
+                      {/* Content */}
+                      <div className="pt-12">
+                        <h3 className="text-2xl font-bold mb-4 text-white leading-tight">
+                          {feature.title}
+                        </h3>
+                        <p className="text-gray-300 leading-relaxed text-sm">
+                          {feature.description}
+                        </p>
+                      </div>
+
+                     
+                    </motion.div>
+
+                    {/* Connecting Line (except for last item) */}
+                    {index < features.length - 1 && (
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        transition={{ duration: 1, delay: (index + 1) * 0.3 }}
+                        viewport={{ once: true }}
+                        className="hidden lg:block absolute top-1/2 -right-4 w-8 h-px bg-gradient-to-r from-white/40 to-transparent z-0"
+                      />
+                    )}
+                  </motion.div>
+                ))}
               </div>
-            ))}
-          </motion.div>
-        </div>
 
-        {/* Background Effects */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-green-500/5 rounded-full blur-3xl" />
-          <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
-        </div>
-      </section>
+              {/* Floating Background Elements */}
+              <motion.div
+                animate={{
+                  y: [0, -20, 0],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute -top-12 left-1/4 w-32 h-32 border border-white/10 rounded-full"
+              />
+              <motion.div
+                animate={{
+                  y: [0, 15, 0],
+                  opacity: [0.2, 0.5, 0.2],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 2,
+                }}
+                className="absolute -bottom-8 right-1/4 w-24 h-24 border border-white/10 rotate-45"
+              />
+            </div>
+          </div>
+        </section>
 
-      {/* Features Section */}
-      <section id="features" className="px-6 py-20 bg-gray-900/50">
-        <div className="max-w-7xl mx-auto">
+        <section className="px-6 py-20" id="about">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="max-w-4xl mx-auto text-center"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-6">
-              Everything you need for
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-white drop-shadow-lg">
+              Ready to optimize your
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400">
-                environmental analysis
+              <span className="text-4xl sm:text-5xl font-light text-gray-300">
+                environmental impact?
               </span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Comprehensive tools for Life Cycle Assessment with real-time
-              insights and actionable recommendations.
+            <p className="text-xl text-gray-300 mb-10 drop-shadow-md">
+              Join leading manufacturers using Dhatu Chakra for sustainable
+              innovation.
             </p>
           </motion.div>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5 }}
-                className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300"
-              >
-                <div className="w-12 h-12 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-xl flex items-center justify-center text-green-400 mb-6">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed">
-                  {feature.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="px-6 py-20" id="about">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto text-center"
-        >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-6">
-            Ready to optimize your
-            <br />
-            environmental impact?
-          </h2>
-          <p className="text-xl text-gray-400 mb-10">
-            Join leading manufacturers using Dhatu Chakra for sustainable
-            innovation.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/lca/new">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white text-black px-8 py-4 rounded-full font-semibold text-lg flex items-center gap-2 hover:bg-gray-100 transition-colors"
-              >
-                Start your first analysis
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
-            </Link>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="text-gray-400 hover:text-white transition-colors font-medium"
-            >
-              Contact Sales
-            </motion.button>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Footer */}
-      <footer className="px-6 py-12 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
-                <Leaf className="w-4 h-4 text-white" />
+        {/* Footer */}
+        <footer className="px-6 py-12">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div className="flex items-center gap-2 mb-4 md:mb-0">
+                <span className="font-semibold">Dhatu Chakra</span>
               </div>
-              <span className="font-semibold">Dhatu Chakra</span>
-            </div>
-            <div className="text-gray-400 text-sm">
-              © 2024 Dhatu Chakra. Building sustainable futures.
+              <div className="text-gray-400 text-sm">
+                © {new Date().getFullYear()} Dhatu Chakra. Building sustainable
+                futures.
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 }
