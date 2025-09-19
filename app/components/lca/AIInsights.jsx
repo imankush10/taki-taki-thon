@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 import { Card, CardContent, CardHeader } from "../ui/Card";
 import { Button } from "../ui/Button";
-import { Spinner } from "../ui/Spinner";
 import {
   Brain,
   Sparkles,
@@ -115,16 +115,13 @@ export default function AIInsights({
               animate={{ opacity: 1, scale: 1 }}
               className="flex flex-col items-center"
             >
-              <div className="relative mb-6">
-                <Spinner className="w-12 h-12 text-purple-500" />
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0"
-                >
-                  <Brain className="w-12 h-12 text-purple-400 opacity-30" />
-                </motion.div>
-              </div>
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="mb-6"
+              >
+                <Brain className="w-12 h-12 text-purple-400" />
+              </motion.div>
               <h3 className="text-xl font-semibold text-white mb-2">
                 AI is analyzing your data...
               </h3>
@@ -182,50 +179,59 @@ export default function AIInsights({
             </div>
 
             <div className="prose prose-invert max-w-none">
-              <div className="whitespace-pre-line text-gray-100 leading-relaxed">
-                {insights.split("\n").map((line, index) => {
-                  if (
-                    line.trim().startsWith("**") &&
-                    line.trim().endsWith("**")
-                  ) {
-                    return (
-                      <h3
-                        key={index}
-                        className="text-xl font-bold text-purple-300 mt-6 mb-3 flex items-center gap-2"
-                      >
-                        <Target className="w-5 h-5" />
-                        {line.replace(/\*\*/g, "")}
-                      </h3>
-                    );
-                  }
-                  if (
-                    line.trim().startsWith("-") ||
-                    line.trim().startsWith("•")
-                  ) {
-                    return (
-                      <div
-                        key={index}
-                        className="flex items-start gap-3 mb-2 ml-4"
-                      >
-                        <Lightbulb className="w-4 h-4 text-yellow-400 mt-1 flex-shrink-0" />
-                        <span className="text-gray-200">
-                          {line.replace(/^[-•]\s*/, "")}
-                        </span>
-                      </div>
-                    );
-                  }
-                  if (line.trim()) {
-                    return (
-                      <p
-                        key={index}
-                        className="text-gray-200 mb-3 leading-relaxed"
-                      >
-                        {line}
-                      </p>
-                    );
-                  }
-                  return <br key={index} />;
-                })}
+              <div className="text-gray-100 leading-relaxed">
+                <ReactMarkdown
+                  components={{
+                  h1: ({ children }) => (
+                    <h1 className="text-2xl font-bold text-purple-300 mt-6 mb-4 flex items-center gap-2">
+                      <Target className="w-6 h-6" />
+                      {children}
+                    </h1>
+                  ),
+                  h2: ({ children }) => (
+                    <h2 className="text-xl font-bold text-purple-300 mt-6 mb-3 flex items-center gap-2">
+                      <Target className="w-5 h-5" />
+                      {children}
+                    </h2>
+                  ),
+                  h3: ({ children }) => (
+                    <h3 className="text-lg font-bold text-purple-300 mt-4 mb-2 flex items-center gap-2">
+                      <Target className="w-4 h-4" />
+                      {children}
+                    </h3>
+                  ),
+                  p: ({ children }) => (
+                    <p className="text-gray-200 mb-3 leading-relaxed">{children}</p>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className="space-y-2 mb-4">{children}</ul>
+                  ),
+                  li: ({ children }) => (
+                    <li className="flex items-start gap-3 ml-4">
+                      <Lightbulb className="w-4 h-4 text-yellow-400 mt-1 flex-shrink-0" />
+                      <span className="text-gray-200">{children}</span>
+                    </li>
+                  ),
+                  strong: ({ children }) => (
+                    <strong className="text-white font-semibold">{children}</strong>
+                  ),
+                  em: ({ children }) => (
+                    <em className="text-purple-300 italic">{children}</em>
+                  ),
+                  blockquote: ({ children }) => (
+                    <blockquote className="border-l-4 border-purple-500 pl-4 italic text-gray-300 my-4">
+                      {children}
+                    </blockquote>
+                  ),
+                  code: ({ children }) => (
+                    <code className="bg-gray-800 text-purple-300 px-2 py-1 rounded text-sm">
+                      {children}
+                    </code>
+                  ),
+                }}
+              >
+                {insights}
+              </ReactMarkdown>
               </div>
             </div>
           </motion.div>
