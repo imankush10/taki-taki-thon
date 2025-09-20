@@ -140,7 +140,7 @@ export function ImpactChart({ data }) {
   };
 
   return (
-    <div className="bg-slate-800 dark:bg-slate-900 p-6 rounded-lg shadow-lg border border-slate-600">
+    <div className="bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-600">
       <h3 className="text-lg font-semibold mb-4 text-white">
         Environmental Impact Analysis
       </h3>

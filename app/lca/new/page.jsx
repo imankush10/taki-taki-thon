@@ -52,15 +52,15 @@ export default function NewLcaPage() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/30 dark:to-blue-900/30 px-4 py-2 rounded-full text-green-700 dark:text-green-300 text-sm font-medium mb-4"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-green-900/30 to-blue-900/30 dark:from-green-900/30 dark:to-blue-900/30 px-4 py-2 rounded-full text-green-700 dark:text-green-300 text-sm font-medium mb-4"
               >
                 <Target className="w-4 h-4" />
                 Life Cycle Assessment Wizard
               </motion.div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-3xl font-bold text-white-900 dark:text-white mb-4">
                 Analyze Your Environmental Impact
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-300 dark:text-gray-300 max-w-2xl mx-auto">
                 Follow our step-by-step process to evaluate the environmental
                 footprint and circular economy potential of your metal product.
               </p>

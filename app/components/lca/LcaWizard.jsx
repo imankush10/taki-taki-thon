@@ -110,10 +110,8 @@ export function LcaWizard() {
           >
             <div className="text-center mb-6">
               <Factory className="w-16 h-16 mx-auto mb-4 text-blue-600" />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Project Setup
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <h3 className="text-2xl font-bold text-white">Project Setup</h3>
+              <p className="text-slate-300">
                 Let's start with the basics of your metal product
               </p>
             </div>
@@ -148,7 +146,7 @@ export function LcaWizard() {
                   name="metal"
                   value={currentProject.metal}
                   onChange={handleChange}
-                  className="w-full h-12 px-4 text-lg border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full h-12 px-4 text-lg border border-slate-600 rounded-lg bg-slate-800 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="aluminium">Aluminium</option>
                   <option value="copper">Copper</option>
@@ -168,16 +166,16 @@ export function LcaWizard() {
           >
             <div className="text-center mb-6">
               <Recycle className="w-16 h-16 mx-auto mb-4 text-green-600" />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <h3 className="text-2xl font-bold text-white">
                 Material Composition
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-slate-300">
                 Define your material sources and energy consumption
               </p>
             </div>
 
             <div className="space-y-6">
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 p-6 rounded-xl">
+              <div className="bg-gradient-to-r from-green-900/20 to-blue-900/20 p-6 rounded-xl">
                 <Label
                   htmlFor="rawMaterialPercentage"
                   className="text-lg font-medium mb-4 block"
@@ -221,7 +219,7 @@ export function LcaWizard() {
                   name="energySource"
                   value={currentProject.energySource}
                   onChange={handleChange}
-                  className="w-full h-12 px-4 text-lg border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full h-12 px-4 text-lg border border-slate-600 rounded-lg bg-slate-800 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="grid">Grid (Conventional)</option>
                   <option value="solar">Solar Power</option>
@@ -242,10 +240,10 @@ export function LcaWizard() {
           >
             <div className="text-center mb-6">
               <Target className="w-16 h-16 mx-auto mb-4 text-purple-600" />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <h3 className="text-2xl font-bold text-white">
                 Logistics & Lifecycle
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-slate-300">
                 Transportation and end-of-life scenarios
               </p>
             </div>
@@ -291,7 +289,7 @@ export function LcaWizard() {
                   name="endOfLifeOption"
                   value={currentProject.endOfLifeOption}
                   onChange={handleChange}
-                  className="w-full h-12 px-4 text-lg border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full h-12 px-4 text-lg border border-slate-600 rounded-lg bg-slate-800 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="recycle">Recycle</option>
                   <option value="reuse">Reuse</option>
@@ -323,7 +321,7 @@ export function LcaWizard() {
                     ? "bg-green-500 border-green-500 text-white"
                     : currentStep === index + 1
                     ? "bg-blue-500 border-blue-500 text-white"
-                    : "bg-gray-100 border-gray-300 text-gray-400 dark:bg-gray-700 dark:border-gray-600"
+                    : "bg-slate-700 border-slate-600 text-slate-400"
                 }`}
                 whileHover={{ scale: 1.05 }}
               >
@@ -331,7 +329,7 @@ export function LcaWizard() {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="w-6 h-6 bg-white rounded-full"
+                    className="w-6 h-6 rounded-full"
                   />
                 ) : (
                   step.icon
@@ -340,9 +338,7 @@ export function LcaWizard() {
               {index < steps.length - 1 && (
                 <div
                   className={`h-1 w-24 mx-4 transition-all duration-300 ${
-                    currentStep > index + 1
-                      ? "bg-green-500"
-                      : "bg-gray-200 dark:bg-gray-600"
+                    currentStep > index + 1 ? "bg-green-500" : "bg-slate-600"
                   }`}
                 />
               )}
@@ -350,17 +346,17 @@ export function LcaWizard() {
           ))}
         </div>
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <h2 className="text-xl font-semibold text-white">
             {steps[currentStep - 1].title}
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 text-sm">
+          <p className="text-slate-300 text-sm">
             Step {currentStep} of {steps.length}
           </p>
         </div>
       </div>
 
       {/* Main Content */}
-      <Card className="overflow-hidden shadow-xl border-0 bg-white dark:bg-gray-800">
+      <Card className="overflow-hidden shadow-xl border-0 bg-slate-800">
         <CardContent className="p-8">
           <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
             <AnimatePresence mode="wait">{getStepContent()}</AnimatePresence>
@@ -412,9 +408,9 @@ export function LcaWizard() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
+                className="mt-4 p-4 bg-red-900/20 border border-red-800 rounded-lg"
               >
-                <p className="text-red-600 dark:text-red-400">{error}</p>
+                <p className="text-red-400">{error}</p>
               </motion.div>
             )}
           </form>

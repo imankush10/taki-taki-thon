@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-export const Spinner = ({ size = 40, color = '#3498db', className = '' }) => (
+export const Spinner = ({ size = 40, color = "#60a5fa", className = "" }) => (
   <div
     className={`spinner ${className}`}
     style={{
-      display: 'inline-block',
+      display: "inline-block",
       width: size,
       height: size,
     }}
@@ -15,7 +15,7 @@ export const Spinner = ({ size = 40, color = '#3498db', className = '' }) => (
       width={size}
       height={size}
       viewBox="0 0 50 50"
-      style={{ display: 'block' }}
+      style={{ display: "block" }}
     >
       <circle
         cx="25"
